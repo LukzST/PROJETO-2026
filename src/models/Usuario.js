@@ -2,7 +2,7 @@ const db = require('../db');
 
 class Usuario {
     static async findByEmail(email) {
-        const result = await db.query('SELECT * FROM usuarios WHERE email = $1', [email]);
+        const result = await db.query('SELECT * FROM usuarios WHERE email = $1', [email.toLowerCase()]);
         return result.rows[0];
     }
 
@@ -14,7 +14,7 @@ class Usuario {
     static async create(nome, email, senha, cargo, status = 'ATIVO') {
         const result = await db.query(
             'INSERT INTO usuarios (nome, email, senha, cargo, status) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-            [nome, email, senha, cargo, status]
+            [nome, email.toLowerCase(), senha, cargo, status]
         );
         return result.rows[0].id;
     }
@@ -22,7 +22,7 @@ class Usuario {
     static async update(id, nome, email, cargo, status) {
         await db.query(
             'UPDATE usuarios SET nome=$1, email=$2, cargo=$3, status=$4 WHERE id=$5',
-            [nome, email, cargo, status, id]
+            [nome, email.toLowerCase(), cargo, status, id]
         );
     }
 

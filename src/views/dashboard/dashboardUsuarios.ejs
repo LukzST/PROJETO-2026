@@ -26,12 +26,12 @@
                 <div class="user-profile-group">
                     <div class="user-details">
                         <span class="user-name"><strong><%= user %></strong></span>
-                        <span class="user-role" style="color: #888888;">Professor</span>
+                        <span class="user-role" style="color: #888888;"><strong><%= userCargo %></strong></span>
                     </div>
                 </div>
                 <div class="header-actions">
                     <%- include('../partials/notificacoes', { notificacaoClasse: 'header-icon' }) %>
-                    <a href="/dashboard/config" class="header-icon"><i class="fas fa-cog"></i></a>
+                     
                 </div>
             </div>
         </header>
@@ -151,7 +151,7 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn-action" style="margin-top: 30px; width: 100%; justify-content: center;">SALVAR USUÁRIO</button>
+                <button type="submit" class="btn-secondary-dash" style="margin-top: 30px; width: 100%; justify-content: center;">SALVAR USUÁRIO</button>
             </form>
         </div>
     </div>
@@ -206,7 +206,7 @@
                 document.getElementById('userModalTitle').innerText = "EDITAR USUÁRIO";
                 document.getElementById('userId').value = id;
                 document.getElementById('userName').value = nome;
-                document.getElementById('userEmail').value = email;
+                document.getElementById('userEmail').value = email.toLowerCase();
                 document.getElementById('userCargo').value = cargo;
                 document.getElementById('userStatus').value = status;
                 document.getElementById('passwordField').style.display = "none";

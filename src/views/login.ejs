@@ -169,10 +169,10 @@
             <div class="login-form professor <%= tipo === 'professor' ? 'active' : '' %>" id="professorForm">
                 <form action="/login/professor" method="POST">
                     <div class="input-group">
-                        <input type="text" name="usuario" placeholder="E-MAIL INSTITUCIONAL" required>
+                        <input type="text" name="usuario" placeholder="E-MAIL INSTITUCIONAL" oninput="this.value = this.value.toLowerCase()" required>
                     </div>
                     <div class="input-group">
-                        <input type="password" name="senha" placeholder="SENHA" required>
+                        <input type="password" name="senha" placeholder="SENHA"  required>
                     </div>
                     <button type="submit" class="btn-secondary-dash">ENTRAR NO SISTEMA</button>
                 </form>
@@ -185,10 +185,10 @@
                 </div>
                 <form action="/login/aluno" method="POST">
                     <div class="input-group input-group-aluno">
-                        <input type="text" name="matricula" placeholder="MATRÍCULA">
+                        <input type="text" name="matricula" placeholder="MATRÍCULA" oninput="this.value = this.value.toLowerCase()">
                     </div>
                     <div class="input-group input-group-aluno">
-                        <input type="email" name="email" placeholder="E-MAIL">
+                        <input type="email" name="email" oninput="this.value = this.value.toLowerCase()" placeholder="E-MAIL">
                     </div>
                     <div class="input-group input-group-aluno">
                         <input type="password" name="senha" placeholder="SENHA" required>

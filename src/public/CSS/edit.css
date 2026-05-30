@@ -41,9 +41,6 @@ body.dash-body {
     flex: 1;
     display: flex;
     margin-top: 20px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    border-radius: 20px;
     flex-direction: column;
     padding: 40px 60px;
     min-height: 100vh;

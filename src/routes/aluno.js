@@ -12,6 +12,7 @@ router.post('/aluno/alterar-senha', checkAlunoAuth, alunoController.alterarSenha
 router.get('/aluno/tarefas', checkAlunoAuth, alunoController.tarefas);
 router.post('/aluno/tarefas/enviar/:id', checkAlunoAuth, upload.single('arquivo'), alunoController.enviarTarefa);
 router.get('/aluno/equipe', checkAlunoAuth, alunoController.equipe);
+router.get('/equipe', alunoController.equipe);
 router.get('/aluno/api/dados-grafico', checkAlunoAuth, alunoController.apiDadosGrafico);
 router.get('/aluno/api/ranking-comparativo', checkAlunoAuth, alunoController.apiRankingComparativo);
 

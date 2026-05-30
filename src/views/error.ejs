@@ -30,12 +30,12 @@
                 <div class="user-profile-group">
                     <div class="user-details">
                         <span class="user-name"><strong><%= user %></strong></span>
-                        <span class="user-role" style="color: #888888;">Professor</span>
+                        <span class="user-role" style="color: #888888;"><strong><%= userCargo %></strong></span>
                     </div>
                 </div>
                 <div class="header-actions">
                     <%- include('./partials/notificacoes', { notificacaoClasse: 'header-icon' }) %>
-                    <a href="/dashboard/config" class="header-icon"><i class="fas fa-cog"></i></a>
+                     
                 </div>
             </div>
         </header>
@@ -63,12 +63,12 @@
                 <% } %>
                 
                 <div class="modal-actions" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                    <a href="javascript:history.back()" class="btn-secondary-dash" style="padding: 12px 25px; text-decoration: none;">
+                    <a href="javascript:history.back()" class="btn-secondary-dash" style="text-decoration: none; height: 55px;">
                         <i class="fas fa-arrow-left"></i> VOLTAR
                     </a>
                     
                     <% if (isAdmin) { %>
-                        <a href="javascript:void()" onclick="openEraseModal()" class="btn-secondary-dash" style="padding: 12px 25px; text-decoration: none; border-color: #ff0101; color: #ff0101;">
+                        <a href="javascript:void()" onclick="openEraseModal()" class="btn-secondary-dash" style="text-decoration: none; height: 55px;">
                             <i class="fas fa-database"></i> LIMPAR BASE DE DADOS (ALUNOS)
                         </a>
                     <% } %>
@@ -99,11 +99,11 @@
             </p>
             <div class="modal-actions">
                 <form action="/dashboard/erase-all" method="POST">
-                    <button type="submit" class="btn-danger-action">
+                    <button type="submit" class="btn-secondary-dash" style="justify-content: center; height: 50px; width: 300px;">
                         <i class="fas fa-trash"></i> SIM, APAGAR TUDO
                     </button>
                 </form>
-                <button onclick="closeEraseModal()" class="btn-cancel">
+                <button onclick="closeEraseModal()" class="btn-secondary-dash" style="margin-left: 9px; justify-content: center;height: 50px; width: 300px;">
                     CANCELAR
                 </button>
             </div>

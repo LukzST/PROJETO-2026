@@ -494,7 +494,7 @@ exports.addAluno = async (req, res) => {
     const numeroAleatorio = Math.floor(Math.random() * 90 + 10);
     const email = `${nomeLower}${numeroAleatorio}@aluno.analisai.com`;
     const senha = "aluno123";
-    const matricula = `ALU${Date.now().toString().slice(-8)}`;
+    const matricula = `alu${Date.now().toString().slice(-8)}`;
     const alunoResult = await db.query(
       `INSERT INTO alunos (nome, ano_escolar, idade, nota, presenca, nivel) 
              VALUES ($1, $2, $3, 0, 100, 'EM DESENVOLVIMENTO') RETURNING id`,

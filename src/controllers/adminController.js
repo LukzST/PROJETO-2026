@@ -29,7 +29,7 @@ exports.adicionarUsuario = async (req, res) => {
     try {
         await db.query(
             'INSERT INTO usuarios (nome, email, senha, cargo, status) VALUES ($1, $2, $3, $4, $5)',
-            [nome, email, senha, cargo, 'ATIVO']
+            [nome, email.toLowerCase(), senha, cargo, 'ATIVO']
         );
         req.flash('success_msg', 'Usuário cadastrado com sucesso!');
         res.redirect('/dashboard/usuarios');
@@ -44,7 +44,7 @@ exports.atualizarUsuario = async (req, res) => {
     try {
         await db.query(
             'UPDATE usuarios SET nome=$1, email=$2, cargo=$3, status=$4 WHERE id=$5',
-            [nome, email, cargo, status, id]
+            [nome, email.toLowerCase(), cargo, status, id]
         );
         req.flash('success_msg', 'Usuário atualizado com sucesso!');
         res.redirect('/dashboard/usuarios');

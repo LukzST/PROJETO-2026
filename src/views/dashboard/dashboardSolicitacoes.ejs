@@ -26,7 +26,6 @@
         .solicitacao-nome {
             color: #fff;
             font-size: 1rem;
-            font-weight: bold;
             margin-bottom: 5px;
         }
         
@@ -85,7 +84,7 @@
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            background: #080808;
+            background: #18181b;
             border: 2px solid #2e3134;
             border-radius: 20px;
         }
@@ -169,12 +168,12 @@
                 <div class="user-profile-group">
                     <div class="user-details">
                         <span class="user-name"><strong><%= user %></strong></span>
-                        <span class="user-role" style="color: #888888;">Professor</span>
+                        <span class="user-role" style="color: #888888;"><strong><%= userCargo %></strong></span>
                     </div>
                 </div>
                 <div class="header-actions">
                     <%- include('../partials/notificacoes', { notificacaoClasse: 'header-icon' }) %>
-                    <a href="/dashboard/config" class="header-icon"><i class="fas fa-cog"></i></a>
+                     
                 </div>
             </div>
         </header>
@@ -200,10 +199,10 @@
                                 <%= new Date(s.data_solicitacao).toLocaleString('pt-BR') %>
                             </div>
                             <div class="solicitacao-acoes">
-                                <button class="b" onclick="abrirModalAprovar(<%= s.id %>, '<%= s.nome %>')">
+                                <button class="btn-secondary-dash" onclick="abrirModalAprovar(<%= s.id %>, '<%= s.nome %>')">
                                     <i class="fas fa-check"></i> APROVAR
                                 </button>
-                                <button class="a" onclick="abrirModalRejeitar(<%= s.id %>, '<%= s.nome %>')">
+                                <button class="btn-secondary-dash" onclick="abrirModalRejeitar(<%= s.id %>, '<%= s.nome %>')">
                                     <i class="fas fa-times"></i> REJEITAR
                                 </button>
                             </div>
@@ -225,7 +224,7 @@
                     <p style="color: #888; margin-bottom: 15px;" id="nomeAprovar"></p>
                     <label>NOVA SENHA</label>
                     <input type="password" name="nova_senha" class="filter-input" required minlength="6">
-                    <button type="submit" class="btn-action" style="margin-top: 20px;">REDEFINIR SENHA</button>
+                    <button type="submit" class="btn-secondary-dash" style="margin-top: 20px; justify-content: center;">REDEFINIR SENHA</button>
                 </div>
             </form>
         </div>
@@ -242,7 +241,7 @@
                     <p style="color: #888; margin-bottom: 15px;" id="nomeRejeitar"></p>
                     <label>MOTIVO (opcional)</label>
                     <textarea name="motivo" class="filter-input" rows="3" placeholder="Por que está rejeitando?"></textarea>
-                    <button type="submit" class="btn-action" style="margin-top: 20px;">REJEITAR</button>
+                    <button type="submit" class="btn-secondary-dash" style="margin-top: 20px; justify-content: center;">REJEITAR</button>
                 </div>
             </form>
         </div>

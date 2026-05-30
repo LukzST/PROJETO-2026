@@ -45,8 +45,9 @@ exports.showLogin = (req, res) => {
 
 exports.loginProfessor = async (req, res) => {
     const { usuario, senha } = req.body;
+    usuario.toLowerCase();
     try {
-        const result = await db.query('SELECT * FROM usuarios WHERE email = $1', [usuario.toLowerCase()]);
+        const result = await db.query('SELECT * FROM usuarios WHERE email = $1', [usuario]);
         if (result.rows.length === 0) {
             req.flash('error_msg', 'E-mail não encontrado');
             return res.render('login', { error_msg: req.flash('error_msg')[0], success_msg: null, tipo: 'professor' });
@@ -214,7 +215,7 @@ exports.solicitarRedefinicaoSenha = async (req, res) => {
         });
     }
     try {
-        const result = await db.query('SELECT id, nome FROM usuarios WHERE email = $1', [email]);
+        const result = await db.query('SELECT id, nome FROM usuarios WHERE email = $1', [email.toLowerCase()]);
         if (result.rows.length === 0) {
             req.flash('error_msg', 'E-mail não encontrado');
             return res.render('esqueciSenha', {

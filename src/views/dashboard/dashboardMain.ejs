@@ -24,12 +24,12 @@
                 <div class="user-profile-group">
                     <div class="user-details">
                         <span class="user-name"><strong><%= user %></strong></span>
-                        <span class="user-role" style="color: #888888;">Professor</span>
+                        <span class="user-role" style="color: #888888;"><strong><%= userCargo %></strong></span>
                     </div>
                 </div>
                 <div class="header-actions">
                     <%- include('../partials/notificacoes', { notificacaoClasse: 'header-icon' }) %>
-                    <a href="/dashboard/config" class="header-icon"><i class="fas fa-cog"></i></a>
+                     
                 </div>
             </div>
         </header>
@@ -37,7 +37,7 @@
         <main class="dash-content">
             <section class="welcome-banner">
                 <div class="banner-text">
-                    <h1>Bem-vindo(a) de volta, <%= user.split(' ')[0] %>!</h1>
+                    <h1>Bem-vindo(a) de volta, <%= user.split(' ')[0].toUpperCase() %>!</h1>
                     <p>Acompanhe o desempenho das turmas e gerencie as competências de forma simples.</p>
                 </div>
             </section>
@@ -175,7 +175,7 @@
             <div class="footer-actions">
                 <a href="/dashboard/edit" class="btn-secondary-dash"><i class="fas fa-pencil-alt"></i> GERENCIAR</a>
                 <a href="/dashboard/graficos" class="btn-secondary-dash"><i class="fas fa-chart-pie"></i> ESTATÍSTICAS</a>
-                <a href="/manuais" class="btn-secondary-dash"><i class="fas fa-book-open"></i> MANUAL</a>
+                <a href="/manuais/professor" class="btn-secondary-dash"><i class="fas fa-book-open"></i> MANUAL DO PROFESSOR</a>
             </div>
             <div class="footer-credits">
                 <p>© 2026 AnalisAI
