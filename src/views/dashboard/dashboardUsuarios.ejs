@@ -94,7 +94,7 @@
                                         </button>
                                         <% if (user.id !== userId) { %>
                                             <a href="javascript:void(0)" onclick="confirmDeleteUser('<%= user.id %>', '<%= user.nome %>')" class="delete-link">
-                                                <i class="fas fa-user-minus"></i>
+                                                <span class="material-symbols-outlined">delete</span>
                                             </a>
                                         <% } %>
                                     </td>

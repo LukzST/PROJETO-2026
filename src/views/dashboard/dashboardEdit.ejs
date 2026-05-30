@@ -71,7 +71,7 @@
 
                 <% if (userCargo === 'Admin') { %>
                 <button class="btn-icon btn-erase" onclick="openEraseModal()" title="Apagar Todos os Dados">
-                    <i class="fa-solid fa-trash"></i>
+                    <span class="material-symbols-outlined">delete</span>
                 </button>
                 <% } %>
             </div>
@@ -220,7 +220,7 @@
                                             <i class="fa-solid fa-pen"></i>
                                         </button>
                                         <a href="javascript:void(0)" onclick="confirmDelete('<%= aluno.id %>', '<%= aluno.nome %>')" class="delete-link" title="Excluir Aluno">
-                                            <i class="fa-solid fa-trash"></i>
+                                            <span class="material-symbols-outlined">delete</span>
                                         </a>
                                     </td>
                                 </tr>
@@ -445,7 +445,7 @@
         <div class="modal-actions" style="gap: 10px; display: flex; flex-direction: column; align-items: center;">
             <form action="/dashboard/erase-all" method="POST">
                 <button type="submit" class="btn-secondary-dash" style="justify-content: center; height: 50px; width: 300px;">
-                    <i class="fas fa-trash"></i> SIM, APAGAR TUDO
+                    <span class="material-symbols-outlined">delete</span> SIM, APAGAR TUDO
                 </button>
             </form>
             <button onclick="closeEraseModal()" class="btn-secondary-dash" style="justify-content: center; height: 50px; width: 300px;">
@@ -874,7 +874,7 @@ function showEditTab(tabName) {
                                     <div style="display: flex; align-items: center; gap: 10px;">
                                         <span class="competencia-edit-nota ${notaClass}">${parseFloat(comp.nota).toFixed(1)}</span>
                                         <a href="/dashboard/deletar-competencia/${comp.id}" class="btn-delete-comp" onclick="return confirm('Remover esta competência?')">
-                                            <i class="fas fa-trash"></i>
+                                            <span class="material-symbols-outlined">delete</span>
                                         </a>
                                     </div>
                                 </div>
