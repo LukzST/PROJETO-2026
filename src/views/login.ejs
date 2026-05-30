@@ -167,14 +167,14 @@
             </div>
 
             <div class="login-form professor <%= tipo === 'professor' ? 'active' : '' %>" id="professorForm">
-                <form action="/login/professor" method="POST">
+                <form action="/login/professor" method="POST" style="display: flex;flex-direction: column;">
                     <div class="input-group">
                         <input type="text" name="usuario" placeholder="E-MAIL INSTITUCIONAL" oninput="this.value = this.value.toLowerCase()" required>
                     </div>
                     <div class="input-group">
                         <input type="password" name="senha" placeholder="SENHA"  required>
                     </div>
-                    <button type="submit" class="btn-secondary-dash">ENTRAR NO SISTEMA</button>
+                    <button type="submit" class="btn-secondary-dash" style="justify-content: center;">ENTRAR NO SISTEMA</button>
                 </form>
                 <a href="/esqueci-senha" class="link-esqueci">Esqueci minha senha</a>
             </div>
@@ -183,7 +183,7 @@
                 <div class="info-box-login">
                     <i class="fas fa-info-circle"></i> Use sua matrícula ou e-mail cadastrado
                 </div>
-                <form action="/login/aluno" method="POST">
+                <form action="/login/aluno" method="POST" style="display: flex;flex-direction: column;">
                     <div class="input-group input-group-aluno">
                         <input type="text" name="matricula" placeholder="MATRÍCULA" oninput="this.value = this.value.toLowerCase()">
                     </div>
@@ -193,7 +193,7 @@
                     <div class="input-group input-group-aluno">
                         <input type="password" name="senha" placeholder="SENHA" required>
                     </div>
-                    <button type="submit" class="btn-secondary-dash">ENTRAR NO SISTEMA</button>
+                    <button type="submit" class="btn-secondary-dash" style="justify-content: center;">ENTRAR NO SISTEMA</button>
                 </form>
             </div>
         </div>
