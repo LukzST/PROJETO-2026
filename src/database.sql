@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS alunos (
     ano_escolar VARCHAR(50) NOT NULL CHECK (ano_escolar IN ('1º MÉDIO', '2º MÉDIO', '3º MÉDIO', '9º FUNDAMENTAL')),
     idade INTEGER NOT NULL,
     nota DECIMAL(3,1) DEFAULT 0.0,
-    presenca INTEGER DEFAULT 100,
+    presenca INTEGER DEFAULT 100 CHECK (presenca >= 0 AND presenca <= 100),
     nivel VARCHAR(30) DEFAULT 'EM DESENVOLVIMENTO'
 );
 
