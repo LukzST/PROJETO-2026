@@ -159,7 +159,7 @@ exports.avaliarAluno = async (req, res) => {
             await client.query(
                 `INSERT INTO aluno_competencias (aluno_id, competencia_id, nota, observacoes)
                  VALUES ($1, $2, $3, $4)`,
-                [aluno_id, tarefa.rows[0].competencia_id, nota, `Avaliado via tarefa ID ${tarefa_id}`]
+                [aluno_id, tarefa.rows[0].competencia_id, nota, `Avaliado pelo professor`]
             );
             virouCompetencia = true;
             const media = await client.query(
