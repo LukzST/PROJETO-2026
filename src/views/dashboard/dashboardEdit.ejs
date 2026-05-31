@@ -785,9 +785,6 @@ async function confirmarImportacao() {
         function openAddModal() { document.getElementById('addAlunoModal').style.display = 'flex'; }
         function closeAddModal() { document.getElementById('addAlunoModal').style.display = 'none'; }
         
-        /**
- * Abre o modal de edição e garante que comece na aba 'Acesso'
- */
 function openEditModal(id, nome, presenca) {
     fetch(`/dashboard/aluno-dados/${id}`)
         .then(response => response.json())
@@ -822,9 +819,6 @@ function openEditModal(id, nome, presenca) {
         });
 }
 
-/**
- * Controla a troca de abas dentro do modal
- */
 function showEditTab(tabName) {
     const contents = document.querySelectorAll('#editAlunoModal .tab-content');
     contents.forEach(content => {
