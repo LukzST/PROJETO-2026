@@ -7,8 +7,6 @@ router.get('/termos', authController.showTermos);
 router.get('/manuais', authController.showManuais);
 router.get('/manuais/professor', authController.showManualDeUso);
 router.get('/manuais/aluno', authController.showManualDoAluno);
-router.get('/cadastro', authController.showCadastro);
-router.post('/cadastro', authController.cadastro);
 router.get('/login', authController.showLogin);
 router.post('/login/professor', authController.loginProfessor);
 router.post('/login/aluno', authController.loginAluno);

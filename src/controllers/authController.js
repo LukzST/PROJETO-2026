@@ -167,36 +167,6 @@ exports.logout = (req, res) => {
     res.redirect('/');
 };
 
-exports.showCadastro = (req, res) => {
-    res.render('cadastro', { erro: null });
-};
-
-exports.cadastro = async (req, res) => {
-    const { nome, usuario, senha, confirmar_senha } = req.body;
-    if (senha !== confirmar_senha) {
-        req.flash('error_msg', 'As senhas não coincidem!');
-        return res.redirect('/cadastro');
-    }
-    if (senha.length < 6) {
-        req.flash('error_msg', 'A senha deve ter no mínimo 6 caracteres!');
-        return res.redirect('/cadastro');
-    }
-    try {
-        await db.query(
-            'INSERT INTO usuarios (nome, email, senha, status, cargo) VALUES ($1, $2, $3, $4, $5)',
-            [nome, usuario, senha, 'ATIVO', 'Professor']
-        );
-        req.flash('success_msg', 'Cadastro realizado com sucesso! Faça login.');
-        res.redirect('/login');
-    } catch (err) {
-        if (err.code === '23505') {
-            req.flash('error_msg', 'Este e-mail já está cadastrado!');
-        } else {
-            req.flash('error_msg', 'Erro ao realizar cadastro.');
-        }
-        res.redirect('/cadastro');
-    }
-};
 
 exports.showEsqueciSenha = (req, res) => {
     res.render('esqueciSenha', {
