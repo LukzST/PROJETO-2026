@@ -2,6 +2,7 @@ const db = require("../db");
 const ExcelJS = require("exceljs");
 const path = require("path");
 const fs = require("fs");
+const bcrypt = require('bcryptjs');
 
 exports.dashboard = async (req, res) => {
   try {
@@ -339,10 +340,13 @@ exports.alterarSenha = async (req, res) => {
       return res.redirect("/dashboard/config?aba=senha");
     }
     const user = result.rows[0];
-    if (senha_atual !== user.senha) {
+
+    const senhaAtualValida = await bcrypt.compare(senha_atual, user.senha);
+    if (!senhaAtualValida) {
       req.flash("error_msg", "Senha atual incorreta");
       return res.redirect("/dashboard/config?aba=senha");
     }
+
     if (nova_senha.length < 6) {
       req.flash("error_msg", "A nova senha deve ter no mínimo 6 caracteres");
       return res.redirect("/dashboard/config?aba=senha");
@@ -351,8 +355,11 @@ exports.alterarSenha = async (req, res) => {
       req.flash("error_msg", "As senhas não coincidem");
       return res.redirect("/dashboard/config?aba=senha");
     }
+
+    const novaSenhaHash = await bcrypt.hash(nova_senha, 10);
+
     await db.query("UPDATE usuarios SET senha = $1 WHERE id = $2", [
-      nova_senha,
+      novaSenhaHash,
       req.session.userId,
     ]);
     req.flash("success_msg", "Senha alterada com sucesso!");
@@ -494,6 +501,9 @@ exports.addAluno = async (req, res) => {
     const numeroAleatorio = Math.floor(Math.random() * 90 + 10);
     const email = `${nomeLower}${numeroAleatorio}@aluno.analisai.com`;
     const senha = "aluno123";
+    
+    const senhaHash = await bcrypt.hash(senha, 10);
+    
     const matricula = `alu${Date.now().toString().slice(-8)}`;
     const alunoResult = await db.query(
       `INSERT INTO alunos (nome, ano_escolar, idade, nota, presenca, nivel) 
@@ -504,7 +514,7 @@ exports.addAluno = async (req, res) => {
     await db.query(
       `INSERT INTO alunos_login (nome, email, senha, matricula, aluno_id, status) 
              VALUES ($1, $2, $3, $4, $5, 'ATIVO')`,
-      [nome, email, senha, matricula, alunoId],
+      [nome, email, senhaHash, matricula, alunoId],
     );
     req.flash(
       "success_msg",
@@ -559,21 +569,28 @@ exports.deleteAluno = async (req, res) => {
 };
 
 exports.eraseAll = async (req, res) => {
+  const client = await db.connect();
   try {
-    await db.query("TRUNCATE TABLE tarefas_alunos RESTART IDENTITY CASCADE");
-    await db.query("TRUNCATE TABLE tarefas RESTART IDENTITY CASCADE");
-    await db.query(
-      "TRUNCATE TABLE aluno_competencias RESTART IDENTITY CASCADE",
-    );
-    await db.query("TRUNCATE TABLE notas_detalhadas RESTART IDENTITY CASCADE");
-    await db.query("TRUNCATE TABLE alunos_login RESTART IDENTITY CASCADE");
-    await db.query("TRUNCATE TABLE alunos RESTART IDENTITY CASCADE");
+    await client.query("BEGIN");
+    
+    await client.query("TRUNCATE TABLE tarefas_alunos RESTART IDENTITY CASCADE");
+    await client.query("TRUNCATE TABLE tarefas RESTART IDENTITY CASCADE");
+    await client.query("TRUNCATE TABLE aluno_competencias RESTART IDENTITY CASCADE");
+    await client.query("TRUNCATE TABLE notas_detalhadas RESTART IDENTITY CASCADE");
+    await client.query("TRUNCATE TABLE alunos_login RESTART IDENTITY CASCADE");
+    await client.query("TRUNCATE TABLE alunos RESTART IDENTITY CASCADE");
+
+    await client.query("COMMIT");
+    
     req.flash("success_msg", "Todos os dados foram apagados com sucesso!");
     res.redirect("/dashboard/edit");
   } catch (err) {
-    console.error(err);
-    req.flash("error_msg", "Erro ao apagar os dados");
+    await client.query("ROLLBACK");
+    console.error("Erro ao apagar os dados:", err);
+    req.flash("error_msg", "Erro ao apagar os dados no banco de dados.");
     res.redirect("/dashboard/edit");
+  } finally {
+    client.release();
   }
 };
 
@@ -585,6 +602,9 @@ exports.importarDados = async (req, res) => {
     }
     let importados = 0;
     let duplicados = 0;
+    
+    const senhaPadraoHash = await bcrypt.hash("aluno123", 10);
+
     for (const aluno of alunos) {
       const existe = await db.query("SELECT id FROM alunos WHERE nome = $1", [
         aluno.nome,
@@ -608,12 +628,11 @@ exports.importarDados = async (req, res) => {
       const nomeLower = aluno.nome.toLowerCase().replace(/\s+/g, ".");
       const numeroAleatorio = Math.floor(Math.random() * 90 + 10);
       const email = `${nomeLower}${numeroAleatorio}@aluno.analisai.com`;
-      const senha = "aluno123";
       const matricula = `ALU${Date.now().toString().slice(-8)}${importados}`;
       await db.query(
         `INSERT INTO alunos_login (nome, email, senha, matricula, aluno_id, status) 
                  VALUES ($1, $2, $3, $4, $5, 'ATIVO')`,
-        [aluno.nome, email, senha, matricula, alunoId],
+        [aluno.nome, email, senhaPadraoHash, matricula, alunoId],
       );
       importados++;
     }
@@ -638,6 +657,9 @@ exports.importarDadosCompletos = async (req, res) => {
     let importados = 0;
     let duplicados = 0;
     let totalCompetencias = 0;
+
+    const senhaPadraoHash = await bcrypt.hash("aluno123", 10);
+
     for (const aluno of alunos) {
       const existe = await db.query("SELECT id FROM alunos WHERE nome = $1", [
         aluno.nome,
@@ -661,12 +683,11 @@ exports.importarDadosCompletos = async (req, res) => {
       const nomeLower = aluno.nome.toLowerCase().replace(/\s+/g, ".");
       const numeroAleatorio = Math.floor(Math.random() * 90 + 10);
       const email = `${nomeLower}${numeroAleatorio}@aluno.analisai.com`;
-      const senha = "aluno123";
       const matricula = `ALU${Date.now().toString().slice(-8)}${importados}`;
       await db.query(
         `INSERT INTO alunos_login (nome, email, senha, matricula, aluno_id, status) 
                  VALUES ($1, $2, $3, $4, $5, 'ATIVO')`,
-        [aluno.nome, email, senha, matricula, alunoId],
+        [aluno.nome, email, senhaPadraoHash, matricula, alunoId], 
       );
       importados++;
       if (aluno.competencias && aluno.competencias.length > 0) {

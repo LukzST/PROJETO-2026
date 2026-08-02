@@ -232,3 +232,55 @@ exports.alunoRankingComparativo = async (req, res) => {
         res.status(500).json({ error: 'Erro ao carregar dados' });
     }
 };
+exports.buscarAlunos = async (req, res) => {
+    try {
+        const { busca, turma } = req.query;
+        let query = `
+            SELECT a.id, a.nome, a.ano_escolar, a.nota, a.presenca, a.nivel, al.email, al.matricula
+            FROM alunos a
+            LEFT JOIN alunos_login al ON a.id = al.aluno_id
+            WHERE 1=1
+        `;
+        const params = [];
+
+        if (busca && busca.trim() !== '') {
+            params.push(`%${busca.trim().toLowerCase()}%`);
+            query += ` AND (LOWER(a.nome) LIKE $${params.length} OR LOWER(al.email) LIKE $${params.length} OR LOWER(al.matricula) LIKE $${params.length})`;
+        }
+
+        if (turma && turma.trim() !== '') {
+            params.push(turma.trim());
+            query += ` AND a.ano_escolar = $${params.length}`;
+        }
+
+        query += ` ORDER BY a.nome ASC LIMIT 50`;
+
+        const result = await db.query(query, params);
+        res.json({ sucesso: true, total: result.rows.length, alunos: result.rows });
+    } catch (err) {
+        console.error('Erro ao buscar alunos:', err);
+        res.status(500).json({ sucesso: false, error: 'Erro interno ao realizar busca' });
+    }
+};
+
+exports.healthCheck = async (req, res) => {
+    try {
+        await db.query('SELECT 1');
+        
+        res.status(200).json({
+            status: 'UP',
+            timestamp: new Date().toISOString(),
+            uptime: process.uptime(),
+            database: 'CONNECTED',
+            environment: process.env.NODE_ENV || 'development'
+        });
+    } catch (err) {
+        console.error('Erro na verificação do Health Check:', err);
+        res.status(500).json({
+            status: 'DOWN',
+            timestamp: new Date().toISOString(),
+            database: 'DISCONNECTED',
+            error: err.message
+        });
+    }
+};

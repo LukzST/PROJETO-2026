@@ -1,6 +1,7 @@
 const db = require('../db');
 const { criarNotificacao } = require('../utils/notificacao');
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 
 exports.showHome = (req, res) => {
     res.render('index');
@@ -44,8 +45,8 @@ exports.showLogin = (req, res) => {
 };
 
 exports.loginProfessor = async (req, res) => {
-    const { usuario, senha } = req.body;
-    usuario.toLowerCase();
+    let { usuario, senha } = req.body;
+   usuario = usuario.toLowerCase();
     try {
         const result = await db.query('SELECT * FROM usuarios WHERE email = $1', [usuario]);
         if (result.rows.length === 0) {
@@ -57,10 +58,13 @@ exports.loginProfessor = async (req, res) => {
             req.flash('error_msg', 'Sua conta está inativa. Contate o administrador.');
             return res.render('login', { error_msg: req.flash('error_msg')[0], success_msg: null, tipo: 'professor' });
         }
-        if (senha !== user.senha) {
+        const senhaValida = await bcrypt.compare(senha, user.senha);
+
+        if (!senhaValida) { 
             req.flash('error_msg', 'Senha incorreta');
             return res.render('login', { error_msg: req.flash('error_msg')[0], success_msg: null, tipo: 'professor' });
         }
+
         req.session.user = user.nome;
         req.session.userStatus = user.status;
         req.session.userId = user.id;
@@ -121,7 +125,10 @@ exports.loginAluno = async (req, res) => {
                 tipo: tipo
             });
         }
-        if (senha !== aluno.senha) {
+
+        const senhaValida = await bcrypt.compare(senha, aluno.senha);
+
+        if (!senhaValida) {
             req.flash('error_msg', 'Senha incorreta');
             return res.render('login', {
                 error_msg: req.flash('error_msg')[0],

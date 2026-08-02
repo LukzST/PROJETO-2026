@@ -1,5 +1,6 @@
 const db = require('../db');
 const { criarNotificacao } = require('../utils/notificacao');
+const bcrypt = require('bcryptjs');
 
 exports.listarUsuarios = async (req, res) => {
     try {
@@ -24,12 +25,15 @@ exports.listarUsuarios = async (req, res) => {
     }
 };
 
+
 exports.adicionarUsuario = async (req, res) => {
     const { nome, email, senha, cargo } = req.body;
     try {
+        const senhaHash = await bcrypt.hash(senha, 10);
+
         await db.query(
             'INSERT INTO usuarios (nome, email, senha, cargo, status) VALUES ($1, $2, $3, $4, $5)',
-            [nome, email.toLowerCase(), senha, cargo, 'ATIVO']
+            [nome, email.toLowerCase(), senhaHash, cargo, 'ATIVO']
         );
         req.flash('success_msg', 'Usuário cadastrado com sucesso!');
         res.redirect('/dashboard/usuarios');
@@ -108,9 +112,11 @@ exports.aprovarSolicitacaoSenha = async (req, res) => {
             return res.redirect('/dashboard/solicitacoes-senha');
         }
         const s = solicitacao.rows[0];
+        const novaSenhaHash = await bcrypt.hash(nova_senha, 10);
+
         await client.query(
             'UPDATE usuarios SET senha = $1 WHERE id = $2',
-            [nova_senha, s.usuario_id]
+            [novaSenhaHash, s.usuario_id]
         );
         await criarNotificacao(
             'senha_alterada',

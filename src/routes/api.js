@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const apiController = require('../controllers/apiController');
+const { checkAuth } = require('../middlewares/auth');
 
 router.get('/notificacoes', apiController.getNotificacoes);
 router.post('/notificacoes/marcar-lida/:id', apiController.marcarNotificacaoLida);
@@ -10,5 +11,7 @@ router.post('/configuracoes-notificacoes', apiController.saveConfiguracoesNotifi
 router.get('/tarefas-stats', apiController.tarefasStats);
 router.get('/aluno/dados-grafico', apiController.alunoDadosGrafico);
 router.get('/aluno/ranking-comparativo', apiController.alunoRankingComparativo);
+router.get('/alunos/busca', checkAuth, apiController.buscarAlunos);
+router.get('/health', apiController.healthCheck);
 
 module.exports = router;

@@ -4,6 +4,7 @@ const flash = require('connect-flash');
 const favicon = require('serve-favicon');
 const path = require('path');
 const db = require('./db');
+const morgan = require('morgan');
 
 const app = express();
 
@@ -24,10 +25,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(session({
-  secret: 'chave-secreta-meu-site',
+  secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24,
+    httpOnly: true, 
+    secure: process.env.NODE_ENV === 'production'
+  }
 }));
+app.use(morgan('dev'));
 
 app.use(flash());
 app.use(flashMiddleware);

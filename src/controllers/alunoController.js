@@ -1,6 +1,7 @@
 const db = require('../db');
 const { criarNotificacao } = require('../utils/notificacao');
 const upload = require('../middlewares/upload');
+const bcrypt = require('bcryptjs');
 
 exports.dashboard = async (req, res) => {
     try {
@@ -277,7 +278,8 @@ exports.alterarSenha = async (req, res) => {
             });
         }
         const aluno = result.rows[0];
-        if (senha_atual !== aluno.senha) {
+        const senhaAtualValida = await bcrypt.compare(senha_atual, aluno.senha);
+        if (!senhaAtualValida) {
             req.flash('error_msg', 'Senha atual incorreta');
             const alunoData = await db.query(`
                 SELECT 
@@ -363,9 +365,12 @@ exports.alterarSenha = async (req, res) => {
                 abaAtiva: aba
             });
         }
+
+        const novaSenhaHash = await bcrypt.hash(nova_senha, 10);
+
         await db.query(
             'UPDATE alunos_login SET senha = $1 WHERE aluno_id = $2',
-            [nova_senha, alunoId]
+            [novaSenhaHash, alunoId]
         );
         req.flash('success_msg', 'Senha alterada com sucesso!');
         const alunoData = await db.query(
