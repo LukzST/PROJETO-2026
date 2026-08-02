@@ -24,14 +24,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.set('trust proxy', 1);
+
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET || 'chave-secreta-meu-site',
   resave: false,
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
-    httpOnly: true, 
-    secure: process.env.NODE_ENV === 'production'
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax'
   }
 }));
 app.use(morgan('dev'));
