@@ -3,6 +3,7 @@ const ExcelJS = require("exceljs");
 const path = require("path");
 const fs = require("fs");
 const bcrypt = require('bcryptjs');
+
 const crypto = require("crypto");
 
 function gerarSenhaAleatoria() {
