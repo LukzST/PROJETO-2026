@@ -3,6 +3,13 @@ const ExcelJS = require("exceljs");
 const path = require("path");
 const fs = require("fs");
 const bcrypt = require('bcryptjs');
+const crypto = require("crypto");
+
+function gerarSenhaAleatoria() {
+  return crypto.randomBytes(4).toString("hex");
+}
+
+const senha = gerarSenhaAleatoria();
 
 exports.dashboard = async (req, res) => {
   try {
@@ -500,8 +507,6 @@ exports.addAluno = async (req, res) => {
     const nomeLower = nome.toLowerCase().replace(/\s+/g, ".");
     const numeroAleatorio = Math.floor(Math.random() * 90 + 10);
     const email = `${nomeLower}${numeroAleatorio}@aluno.analisai.com`;
-    const senha = "aluno123";
-    
     const senhaHash = await bcrypt.hash(senha, 10);
     
     const matricula = `alu${Date.now().toString().slice(-8)}`;
@@ -603,7 +608,7 @@ exports.importarDados = async (req, res) => {
     let importados = 0;
     let duplicados = 0;
     
-    const senhaPadraoHash = await bcrypt.hash("aluno123", 10);
+    const senhaPadraoHash = await bcrypt.hash(senha, 10);
 
     for (const aluno of alunos) {
       const existe = await db.query("SELECT id FROM alunos WHERE nome = $1", [
@@ -658,7 +663,7 @@ exports.importarDadosCompletos = async (req, res) => {
     let duplicados = 0;
     let totalCompetencias = 0;
 
-    const senhaPadraoHash = await bcrypt.hash("aluno123", 10);
+    const senhaPadraoHash = await bcrypt.hash(senha, 10);
 
     for (const aluno of alunos) {
       const existe = await db.query("SELECT id FROM alunos WHERE nome = $1", [
